@@ -5124,12 +5124,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: aaa9a1601ab146448a35839a700a8040, type: 3}
+      propertyPath: m_bulletSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: aaa9a1601ab146448a35839a700a8040, type: 3}
       propertyPath: m_betweenDelay
-      value: 0.25
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: aaa9a1601ab146448a35839a700a8040, type: 3}
       propertyPath: m_accelerationSpeed
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

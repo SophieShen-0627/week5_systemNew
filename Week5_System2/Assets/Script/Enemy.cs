@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] GameObject Shooter;
     public bool IsDestroyed = false;
-    [SerializeField] bool IsBoss = true;
+    public bool IsBoss = true;
     [SerializeField] CameraShake shaker;
     [SerializeField] ParticleSystem DestroyParticle;
     private PlayerCollider player;

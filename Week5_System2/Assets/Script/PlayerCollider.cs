@@ -16,8 +16,8 @@ public class PlayerCollider : MonoBehaviour
 
     [SerializeField] float ScoreForAnotherBlade = 1000;
     public float CurrentBladeScore = 0;
-
-    private float NextBladeDistance = 3f;
+    public bool AddBlade = false;                         //this is for enemy spawner to spawn boss;
+    private float NextBladeDistance = 4f;
     private List<GameObject> ExtraBlade = new List<GameObject>();
 
     public bool CanBeHurt = true;
@@ -47,10 +47,11 @@ public class PlayerCollider : MonoBehaviour
 
         if (CurrentBladeScore >= ScoreForAnotherBlade)
         {
+            AddBlade = true;
             CurrentBladeScore -= ScoreForAnotherBlade;
             GameObject temp = Instantiate(Blade, transform.position + transform.right * NextBladeDistance, Quaternion.identity, transform);
 
-            NextBladeDistance += 1.5f;
+            NextBladeDistance += 2f;
             ScoreForAnotherBlade *= 2;
 
             ExtraBlade.Add(temp);
