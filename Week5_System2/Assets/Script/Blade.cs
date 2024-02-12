@@ -23,8 +23,7 @@ public class Blade : MonoBehaviour
     {
         if (!player)
         {
-            player = FindObjectOfType<PlayerCollider>().transform;
-            transform.SetParent(player);
+            player = GetComponentInParent<Transform>();
         }
 
         transform.right = player.position - transform.position;
@@ -44,7 +43,7 @@ public class Blade : MonoBehaviour
         if (collision.GetComponent<Bullet>())
         {
             collision.GetComponent<Bullet>().IsDestroyed = true;
-            if (player.GetComponent<PlayerCollider>())
+            if (player.GetComponent<PlayerCollider>() && !player.GetComponent<PlayerCollider>().IsDead)
             {
                 player.GetComponent<PlayerCollider>().Score += 200;
                 player.GetComponent<PlayerCollider>().CurrentBladeScore += 200;

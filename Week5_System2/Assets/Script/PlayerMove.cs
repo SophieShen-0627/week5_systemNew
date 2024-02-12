@@ -34,6 +34,10 @@ public class PlayerMove : MonoBehaviour
     {
         // Apply the movement input to the character
         Vector3 move = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * Time.deltaTime;
-        transform.position += move;
+        Vector3 newPos = transform.position + move;
+
+        newPos = new Vector3(Mathf.Clamp(newPos.x, -10, 10), Mathf.Clamp(newPos.y, -4, 13), newPos.z);
+
+        transform.position = newPos;
     }
 }

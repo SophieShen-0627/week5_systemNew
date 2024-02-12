@@ -20,6 +20,11 @@ public class Enemy : MonoBehaviour
     }
     private void Update()
     {
+        if (Vector2.Distance(player.transform.position, transform.position) <= 1.5f)
+        {
+            IsDestroyed = true;
+        }
+
         if (IsDestroyed)
         {
             if (!HasPlayed)
@@ -72,4 +77,11 @@ public class Enemy : MonoBehaviour
         DestroyParticle.Play();
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<Blade>())
+        {
+            IsDestroyed = true;
+        }
+    }
 }
