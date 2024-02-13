@@ -12,10 +12,9 @@ public class Blade : MonoBehaviour
 
     void Start()
     {
-        radius = Vector2.Distance(player.position, transform.position);
-        if (!player) player = FindObjectOfType<PlayerCollider>().transform;
+        if (!player) player = GetComponentInParent<PlayerCollider>().transform;
 
-        transform.SetParent(player);
+        radius = Vector2.Distance(player.position, transform.position);
     }
 
     // Update is called once per frame
@@ -48,6 +47,11 @@ public class Blade : MonoBehaviour
                 player.GetComponent<PlayerCollider>().Score += 200;
                 player.GetComponent<PlayerCollider>().CurrentBladeScore += 200;
             }
+        }
+
+        if (collision.GetComponent<Enemy>())
+        {
+            collision.GetComponent<Enemy>().IsDestroyed = true;
         }
     }
 }

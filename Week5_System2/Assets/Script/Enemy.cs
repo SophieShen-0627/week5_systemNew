@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
                 if (IsBoss)
                 {
                     StartCoroutine(BigExplosion());
-                    Time.timeScale = 0;
+
                 }
                 else
                 {
@@ -51,16 +51,19 @@ public class Enemy : MonoBehaviour
         player.Score += 500;
         player.CurrentBladeScore += 500;
 
+        GetComponent<SpriteRenderer>().enabled = false;
+        DestroyParticle.Play();
         if (shaker)
         {
-            shaker.StartShake(0.15f, 1f, 1.5f);
+            shaker.StartShake(0.3f, 1f, 1.5f);
         }
     }
 
     IEnumerator BigExplosion()
     {
+        Time.timeScale = 0;
         player.CanBeHurt = false;
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(0.2f);
 
         Time.timeScale = 1;
         player.Score += 5000;
@@ -68,7 +71,7 @@ public class Enemy : MonoBehaviour
 
         if (shaker)
         {
-            shaker.StartShake(0.6f, 2.5f, 2);
+            shaker.StartShake(0.5f, 1f, 3f);
         }
         yield return new WaitForSecondsRealtime(0.5f);
 
@@ -77,11 +80,4 @@ public class Enemy : MonoBehaviour
         DestroyParticle.Play();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.GetComponent<Blade>())
-        {
-            IsDestroyed = true;
-        }
-    }
 }

@@ -293,8 +293,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.9
-      minScalar: 0.7
+      scalar: 0.4
+      minScalar: 0.3
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -347,7 +347,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 3
-      minScalar: 4
+      minScalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -464,8 +464,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5
-      minScalar: 0.3
+      scalar: 0.3
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1157,7 +1157,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 30
+        scalar: 20
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -5074,6 +5074,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: aaa9a1601ab146448a35839a700a8040, type: 3}
       propertyPath: m_Name
       value: LinearAccelAimingShot
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: aaa9a1601ab146448a35839a700a8040, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: aaa9a1601ab146448a35839a700a8040, type: 3}
       propertyPath: m_LocalScale.x

@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerCollider : MonoBehaviour
 {
     [SerializeField] List<Vector2> DeathPos = new List<Vector2>();
     [SerializeField] GameObject Blade;
     [SerializeField] ParticleSystem DeathParticle;
+    [SerializeField] TMP_Text ScoreText;
+    [SerializeField] TMP_Text LifeText;
     public bool IsDead = false;
     private Vector2 InitialPos;
 
@@ -17,7 +20,7 @@ public class PlayerCollider : MonoBehaviour
     [SerializeField] float ScoreForAnotherBlade = 1000;
     public float CurrentBladeScore = 0;
     public bool AddBlade = false;                         //this is for enemy spawner to spawn boss;
-    private float NextBladeDistance = 4f;
+    private float NextBladeDistance = 2.5f;
     private List<GameObject> ExtraBlade = new List<GameObject>();
 
     public bool CanBeHurt = true;
@@ -49,6 +52,12 @@ public class PlayerCollider : MonoBehaviour
         if (IsDead) DoDeadPlayerSetting();
 
         if (LifeNum <= 0) GameEndState.instance.GameEnd = true;
+        else
+        {
+            ScoreText.text = Score.ToString();
+            LifeText.text = LifeNum.ToString();
+        }
+
 
         if (CurrentBladeScore >= ScoreForAnotherBlade)
         {
@@ -56,7 +65,7 @@ public class PlayerCollider : MonoBehaviour
             CurrentBladeScore -= ScoreForAnotherBlade;
             GameObject temp = Instantiate(Blade, transform.position + transform.right * NextBladeDistance, Quaternion.identity, transform);
 
-            NextBladeDistance += 2f;
+            NextBladeDistance += 0.5f;
             ScoreForAnotherBlade *= 2;
 
             ExtraBlade.Add(temp);
@@ -89,11 +98,11 @@ public class PlayerCollider : MonoBehaviour
     IEnumerator HitStop()
     {
         Time.timeScale = 0;
-        shaker.StartShake(0.7f, 1.5f, 2f);
-
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(.4f);
 
         Time.timeScale = 1;
+
+        shaker.StartShake(0.5f, 1f, 4f);
         DeathParticle.Play();
 
         yield return new WaitForSecondsRealtime(0.5f);
@@ -111,6 +120,8 @@ public class PlayerCollider : MonoBehaviour
 
     private void ResetPlayerPos()
     {
+        StartCoroutine(Inevitable());
+
         transform.position = InitialPos;
         BladeNum = 1;
         Score = 0;
@@ -124,13 +135,12 @@ public class PlayerCollider : MonoBehaviour
             }
         }
         ExtraBlade = new List<GameObject>();
-        CanBeHurt = false;
 
-        StartCoroutine(Inevitable());
     }
 
     IEnumerator Inevitable()
     {
+        CanBeHurt = false;
         yield return new WaitForSeconds(2);
 
         CanBeHurt = true;

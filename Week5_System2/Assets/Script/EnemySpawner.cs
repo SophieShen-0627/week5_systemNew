@@ -42,20 +42,60 @@ public class EnemySpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = FollowObject.position + dir;
+        CheckIfEnemyIsDestroyed();
+        //transform.position = FollowObject.position + dir;
 
         if (player.AddBlade)
         {
             StartCoroutine(SpawnBoss());
             player.AddBlade = false;
         }
+
+        InstantSpawnEnemyWhenEmpty();
     }
 
+    private void InstantSpawnEnemyWhenEmpty()
+    {
+        bool HasNoEnemyOnScreen = false;
+        for (int i = 0; i < HasEnemy.Length; i++)
+        {
+            if (HasEnemy[i])
+            {
+                HasNoEnemyOnScreen = false;
+                break;
+            }
+            else HasNoEnemyOnScreen = true;
+        }
+
+        if (HasNoEnemyOnScreen)
+        {
+            if (timeToSpawn >= 2) timeToSpawn -= 1f;
+
+            Transform Pos = GetPosition();
+            if (Pos != transform)
+            {
+                Enemies[CurrentIndex] = Instantiate(NormalEnemy, transform.position, Quaternion.identity);
+                StartCoroutine(MoveObject(Enemies[CurrentIndex], Pos));
+            }
+        }
+    }
+
+    private void CheckIfEnemyIsDestroyed()
+    {
+        for (int i = 0; i < Targets.Count; i++)
+        {
+            if (Enemies[i] != null && Enemies[i].GetComponent<Enemy>().IsDestroyed)
+            {
+                Enemies[i] = null;
+                HasEnemy[i] = false;
+            }
+        }
+    }
     IEnumerator SpawnBoss()
     {
         yield return new WaitForSecondsRealtime(5);
 
-        for (int i = 0; i < Enemies.Length; i++)
+        /*for (int i = 0; i < Enemies.Length; i++)
         {
             if (Enemies[i] != null)
             {
@@ -66,12 +106,28 @@ public class EnemySpawner : MonoBehaviour
                     HasEnemy[i] = false;
                 }
             }
+        }*/
+
+        Transform Pos = GetPosition();
+        if (Pos == transform)
+        {
+            int randomDestroy = Random.Range(0, Enemies.Length);
+            if (Enemies[randomDestroy].GetComponent<Enemy>().IsBoss == false)
+            {
+                Enemies[randomDestroy].GetComponent<Enemy>().IsDestroyed = true;
+                Enemies[randomDestroy] = null;
+                HasEnemy[randomDestroy] = false;
+            }
         }
 
-        Vector3 Pos = GetPosition().position;
-        Enemies[CurrentIndex] = Instantiate(BossEnemy, transform.position, Quaternion.identity);
+        Transform PosNew = GetPosition();
+        if (PosNew != transform)
+        {
+            Enemies[CurrentIndex] = Instantiate(BossEnemy, transform.position, Quaternion.identity);
 
-        StartCoroutine(MoveObject(Enemies[CurrentIndex], TargetPositions[CurrentIndex]));
+            StartCoroutine(MoveObject(Enemies[CurrentIndex], PosNew));
+        }
+
     }
 
     IEnumerator SpawnNormalEnemy()
@@ -100,13 +156,18 @@ public class EnemySpawner : MonoBehaviour
 
     private Transform GetPosition()
     {
+        int start = Random.Range(0, TargetPositions.Length);
+
         for (int i = 0; i < HasEnemy.Length; i++)
         {
-            if (HasEnemy[i] == false)
+            int currentIndex = start + i;
+            if (currentIndex >= TargetPositions.Length) currentIndex = currentIndex % TargetPositions.Length;
+            
+            if (HasEnemy[currentIndex] == false)
             {
-                CurrentIndex = i;
-                HasEnemy[i] = true;
-                return TargetPositions[i];
+                CurrentIndex = currentIndex;
+                HasEnemy[currentIndex] = true;
+                return TargetPositions[currentIndex];
             }
         }
 
