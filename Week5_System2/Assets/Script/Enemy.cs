@@ -48,6 +48,8 @@ public class Enemy : MonoBehaviour
     IEnumerator NormalExplosion()
     {
         yield return new WaitForEndOfFrame();
+
+        GetComponent<AudioSource>().PlayOneShot(AudioManager.instance.SmallEnemyExplode);
         player.Score += 500;
         player.CurrentBladeScore += 500;
 
@@ -66,6 +68,9 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.2f);
 
         Time.timeScale = 1;
+
+        GetComponent<AudioSource>().PlayOneShot(AudioManager.instance.BossExplode);
+        
         player.Score += 5000;
         player.CurrentBladeScore += 5000;
 

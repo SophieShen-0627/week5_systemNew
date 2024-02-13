@@ -44,6 +44,7 @@ public class Blade : MonoBehaviour
             collision.GetComponent<Bullet>().IsDestroyed = true;
             if (player.GetComponent<PlayerCollider>() && !player.GetComponent<PlayerCollider>().IsDead)
             {
+                GetComponent<AudioSource>().PlayOneShot(AudioManager.instance.BulletExplode);
                 player.GetComponent<PlayerCollider>().Score += 200;
                 player.GetComponent<PlayerCollider>().CurrentBladeScore += 200;
             }

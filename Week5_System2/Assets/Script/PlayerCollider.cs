@@ -61,6 +61,7 @@ public class PlayerCollider : MonoBehaviour
 
         if (CurrentBladeScore >= ScoreForAnotherBlade)
         {
+            GetComponent<AudioSource>().PlayOneShot(AudioManager.instance.SpawnAnotherBlade);
             AddBlade = true;
             CurrentBladeScore -= ScoreForAnotherBlade;
             GameObject temp = Instantiate(Blade, transform.position + transform.right * NextBladeDistance, Quaternion.identity, transform);
@@ -98,10 +99,14 @@ public class PlayerCollider : MonoBehaviour
     IEnumerator HitStop()
     {
         Time.timeScale = 0;
+        AudioManager.instance.GetComponent<AudioSource>().Stop();
         yield return new WaitForSecondsRealtime(.4f);
 
         Time.timeScale = 1;
+        AudioManager.instance.GetComponent<AudioSource>().Play();
 
+
+        GetComponent<AudioSource>().PlayOneShot(AudioManager.instance.PlayerExplode);
         shaker.StartShake(0.5f, 1f, 4f);
         DeathParticle.Play();
 

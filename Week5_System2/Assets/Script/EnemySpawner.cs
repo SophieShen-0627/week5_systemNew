@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] GameObject NormalEnemy;
     [SerializeField] GameObject BossEnemy;
     [SerializeField] float MovingSpeed = 2;
+    [SerializeField] Image BossWarning;
     private Vector3 dir;
 
     [SerializeField] List<Transform> Targets = new List<Transform>();
@@ -19,6 +21,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] float timeToSpawn = 6;
 
     private PlayerCollider player;
+    private int BossCountDown = 5;
+    private bool SpawnBossByTimeCount = false;
 
     private void Awake()
     {
@@ -27,7 +31,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-
+        BossWarning.gameObject.SetActive(false);
         TargetPositions = Targets.ToArray();
 
         HasEnemy = new bool[Targets.Count];
@@ -51,9 +55,20 @@ public class EnemySpawner : MonoBehaviour
             player.AddBlade = false;
         }
 
+        if (timeToSpawn <= 2 && !SpawnBossByTimeCount)
+        {
+            StartCoroutine(SpawnBossByTime());
+            SpawnBossByTimeCount = true;
+        }
+
         InstantSpawnEnemyWhenEmpty();
     }
 
+    IEnumerator SpawnBossByTime()
+    {
+        yield return new WaitForSecondsRealtime(4);
+        StartCoroutine(SpawnBoss());
+    }
     private void InstantSpawnEnemyWhenEmpty()
     {
         bool HasNoEnemyOnScreen = false;
@@ -69,7 +84,7 @@ public class EnemySpawner : MonoBehaviour
 
         if (HasNoEnemyOnScreen)
         {
-            if (timeToSpawn >= 2) timeToSpawn -= 1f;
+            if (timeToSpawn > 2) timeToSpawn -= 1f;
 
             Transform Pos = GetPosition();
             if (Pos != transform)
@@ -93,21 +108,11 @@ public class EnemySpawner : MonoBehaviour
     }
     IEnumerator SpawnBoss()
     {
+        BossCountDown = 5;
+        StartCoroutine(SpawnBossCounter());
         yield return new WaitForSecondsRealtime(5);
 
-        /*for (int i = 0; i < Enemies.Length; i++)
-        {
-            if (Enemies[i] != null)
-            {
-                if (Enemies[i].GetComponent<Enemy>().IsBoss == false)
-                {
-                    Enemies[i].GetComponent<Enemy>().IsDestroyed = true;
-                    Enemies[i] = null;
-                    HasEnemy[i] = false;
-                }
-            }
-        }*/
-
+        BossWarning.gameObject.SetActive(false);
         Transform Pos = GetPosition();
         if (Pos == transform)
         {
@@ -128,6 +133,22 @@ public class EnemySpawner : MonoBehaviour
             StartCoroutine(MoveObject(Enemies[CurrentIndex], PosNew));
         }
 
+    }
+
+    IEnumerator SpawnBossCounter()
+    {
+        if (BossCountDown > 0)
+        {
+            BossCountDown -= 1;
+            GetComponent<AudioSource>().PlayOneShot(AudioManager.instance.BossSpawn);
+
+            BossWarning.gameObject.SetActive(true);
+            yield return new WaitForSecondsRealtime(.4f);
+            BossWarning.gameObject.SetActive(false);
+
+            yield return new WaitForSecondsRealtime(.6f);
+            StartCoroutine(SpawnBossCounter());
+        }
     }
 
     IEnumerator SpawnNormalEnemy()
