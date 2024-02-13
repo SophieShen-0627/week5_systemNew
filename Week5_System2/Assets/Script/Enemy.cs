@@ -20,10 +20,10 @@ public class Enemy : MonoBehaviour
     }
     private void Update()
     {
-        if (Vector2.Distance(player.transform.position, transform.position) <= 1.5f)
+        /*if (Vector2.Distance(player.transform.position, transform.position) <= 1.5f)
         {
             IsDestroyed = true;
-        }
+        }*/
 
         if (IsDestroyed)
         {

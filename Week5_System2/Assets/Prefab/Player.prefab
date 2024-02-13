@@ -136,7 +136,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.25
+  m_Radius: 0.2
 --- !u!114 &5749907612157616558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +152,8 @@ MonoBehaviour:
   DeathPos: []
   Blade: {fileID: 3986368923923679658, guid: ca82c9c16a5b820409a2f8c9aa5654a8, type: 3}
   DeathParticle: {fileID: 2373889294638022896}
+  ScoreText: {fileID: 0}
+  LifeText: {fileID: 0}
   IsDead: 0
   BladeNum: 1
   LifeNum: 9
